@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import *
 
@@ -28,16 +28,23 @@ def store_answer():
     answer = request.form['choice']
     responses.append(answer)
     qid = len(responses)
-    survey_len = len(satisfaction_survey.questions)
 
-    if qid == survey_len:
-        return redirect('/end')
-    else:
-        return redirect(f"/questions/{len(responses)}")
+    return redirect(f"/questions/{len(responses)}")
 
 @app.route('/questions/<int:qid>')
 def display_que(qid):
     questions = satisfaction_survey.questions
+    if (responses is None):
+        return redirect("/")
+        
+    if (len(responses) != qid):
+        flash("Error: you are trying to access question out of order")
+        return redirect(f"/questions/{len(responses)}")
+
+    if qid == len(satisfaction_survey.questions):
+        return redirect('/end')
+
+
     return render_template('question.html',questions=questions, que_num=qid)
 
 
