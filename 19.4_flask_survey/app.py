@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, flash
+from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import *
 
@@ -8,15 +8,18 @@ app.config['SECRET_KEY']="section193"
 debug = DebugToolbarExtension(app)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS']=False
 
-responses = []
 
 @app.route('/')
 def survey_home():
-    responses.clear()
     
     title = satisfaction_survey.title
     instructions = satisfaction_survey.instructions
     return render_template('home.html', title=title, instructions=instructions)
+
+@app.route('/new-user', methods=['POST'])
+def new_user():
+    session['responses'] = []
+    return redirect('/questions/0')
 
 @app.route('/questions/0')
 def que0():
@@ -25,14 +28,19 @@ def que0():
 
 @app.route('/answers', methods=['POST'])
 def store_answer():
+    responses = session['responses']
     answer = request.form['choice']
     responses.append(answer)
+    session['responses'] = responses
+
     qid = len(responses)
 
     return redirect(f"/questions/{len(responses)}")
 
 @app.route('/questions/<int:qid>')
 def display_que(qid):
+    responses = session['responses']
+    print(session['responses'])
     questions = satisfaction_survey.questions
     if (responses is None):
         return redirect("/")
@@ -50,6 +58,6 @@ def display_que(qid):
 
 @app.route('/end')
 def end():
-    
+    responses = session['responses']
     return render_template('end.html', responses=responses)
 
