@@ -4,9 +4,9 @@
 
 <h2>{{title}}</h2>
 
-<form action="/questions/3" method="POST">
-    <p>{{questions[2].question}}</p>
-    {% for choice in questions[2].choices %}
+<form action="/answers" method="POST">
+    <p>{{questions[que_num].question}}</p>
+    {% for choice in questions[que_num].choices %}
         <input type="radio" name="choice" value={{choice}}>
         {{choice}}
     {% endfor %}

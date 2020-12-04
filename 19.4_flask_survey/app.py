@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import *
 
@@ -6,12 +6,14 @@ app = Flask(__name__)
 app.config['SECRET_KEY']="section193"
 
 debug = DebugToolbarExtension(app)
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS']=False
 
 responses = []
-qid = str(len(responses))
 
 @app.route('/')
 def survey_home():
+    responses.clear()
+    
     title = satisfaction_survey.title
     instructions = satisfaction_survey.instructions
     return render_template('home.html', title=title, instructions=instructions)
@@ -21,31 +23,26 @@ def que0():
     questions = satisfaction_survey.questions
     return render_template('question0.html', questions=questions)
 
-@app.route('/questions/1', methods=['POST'])
-def que1():
+@app.route('/answers', methods=['POST'])
+def store_answer():
     answer = request.form['choice']
     responses.append(answer)
-    questions = satisfaction_survey.questions
-    return render_template('question1.html', questions=questions)
+    qid = len(responses)
+    survey_len = len(satisfaction_survey.questions)
 
-@app.route('/questions/2', methods=['POST'])
-def que2():
-    answer = request.form['choice']
-    responses.append(answer)
-    questions = satisfaction_survey.questions
-    return render_template('question2.html', questions=questions)
+    if qid == survey_len:
+        return redirect('/end')
+    else:
+        return redirect(f"/questions/{len(responses)}")
 
-@app.route('/questions/3', methods=['POST'])
-def que3():
-    answer = request.form['choice']
-    responses.append(answer)
+@app.route('/questions/<int:qid>')
+def display_que(qid):
     questions = satisfaction_survey.questions
-    return render_template('question3.html', questions=questions)
+    return render_template('question.html',questions=questions, que_num=qid)
 
-@app.route('/end', methods=['POST'])
+
+@app.route('/end')
 def end():
-    answer = request.form['choice']
-    responses.append(answer)
-
+    
     return render_template('end.html', responses=responses)
 
