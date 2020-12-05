@@ -3,9 +3,11 @@
 {% block content %}
 
 <h2>{{title}}</h2>
-
+<p><i>{{instructions}}</i></p>
+<hr>
 <form action="/answers" method="POST">
     <p>{{questions[0].question}}</p>
+
     {% for choice in questions[0].choices %}
         <input type="radio" name="choice" value={{choice}}>
         {{choice}}

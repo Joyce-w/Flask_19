@@ -11,20 +11,21 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS']=False
 
 @app.route('/')
 def survey_home():
-    
-    title = satisfaction_survey.title
-    instructions = satisfaction_survey.instructions
-    return render_template('home.html', title=title, instructions=instructions)
+    return render_template('home.html', surveys=surveys)
 
 @app.route('/new-user', methods=['POST'])
 def new_user():
     session['responses'] = []
+    session['survey'] = request.form['picked_survey']
     return redirect('/questions/0')
 
 @app.route('/questions/0')
 def que0():
-    questions = satisfaction_survey.questions
-    return render_template('question0.html', questions=questions)
+    selected = surveys[session['survey']]
+    title = selected.title
+    instructions = selected.instructions
+    que_list = selected.questions
+    return render_template('question0.html', questions=que_list, title = title, instructions=instructions)
 
 @app.route('/answers', methods=['POST'])
 def store_answer():
@@ -39,6 +40,12 @@ def store_answer():
 
 @app.route('/questions/<int:qid>')
 def display_que(qid):
+    selected = surveys[session['survey']]
+    title = selected.title
+    instructions = selected.instructions
+    que_list = selected.questions
+
+
     responses = session['responses']
     print(session['responses'])
     questions = satisfaction_survey.questions
@@ -53,7 +60,7 @@ def display_que(qid):
         return redirect('/end')
 
 
-    return render_template('question.html',questions=questions, que_num=qid)
+    return render_template('question.html',questions=que_list, title = title, instructions=instructions, que_num=qid)
 
 
 @app.route('/end')

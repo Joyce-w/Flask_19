@@ -2,10 +2,20 @@
 
 {% block content %}
 
-    <h2>{{title}}</h2>
-    <p><i>{{instructions}}</i></p>
+    <h2>Pick a survey to waste your time!</h2>
+     <form action="/new-user" method="POST">
 
-    <form action="/new-user" method="POST">
+    <label for="survey_choice">Pick a survey:</label>
+
+    <select name="picked_survey" id="survey_choice">
+
+        {% for survey in surveys %}
+            <option value ={{survey}}>{{survey}}</option>
+        {% endfor %}
+
+    </select>
+
         <button>Start Survey</button>
     </form>
+    
 {% endblock %}

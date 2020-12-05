@@ -3,6 +3,8 @@
 {% block content %}
 
 <h2>{{title}}</h2>
+<p><i>{{instructions}}</i></p>
+<hr>
     {% for msg in get_flashed_messages() %}
     <p>{{msg}}</p>
     {% endfor %}
