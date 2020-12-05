@@ -10,16 +10,19 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS']=False
 
 
 @app.route('/')
+"""Load home page,survey selection"""
 def survey_home():
     return render_template('home.html', surveys=surveys)
 
 @app.route('/new-user', methods=['POST'])
+"""Make session for specific user to store answers"""
 def new_user():
-    session['responses'] = []
+    session['responses'] = {}
     session['survey'] = request.form['picked_survey']
     return redirect('/questions/0')
 
 @app.route('/questions/0')
+"""Display first question of the selected survey"""
 def que0():
     selected = surveys[session['survey']]
     title = selected.title
@@ -29,22 +32,21 @@ def que0():
 
 @app.route('/answers', methods=['POST'])
 def store_answer():
+    """POST route to send answers and input into response"""
     responses = session['responses']
     answer = request.form['choice']
     responses.append(answer)
     session['responses'] = responses
-
     qid = len(responses)
-
     return redirect(f"/questions/{len(responses)}")
 
 @app.route('/questions/<int:qid>')
+"""Dynamic route to display corresponding question"""
 def display_que(qid):
     selected = surveys[session['survey']]
     title = selected.title
     instructions = selected.instructions
     que_list = selected.questions
-
 
     responses = session['responses']
     print(session['responses'])
@@ -64,6 +66,7 @@ def display_que(qid):
 
 
 @app.route('/end')
+"""Ending route after survey completed"""
 def end():
     responses = session['responses']
     return render_template('end.html', responses=responses)
