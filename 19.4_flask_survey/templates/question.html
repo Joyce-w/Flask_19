@@ -15,6 +15,12 @@
         <input type="radio" name="choice" value={{choice}}>
         {{choice}}
     {% endfor %}
+
+    {% if questions[que_num].allow_text %}
+        <br>
+        <textarea type="text" name="comment"></textarea>
+    {% endif %}
+    
     <button>Next</button>
 </form>
 
