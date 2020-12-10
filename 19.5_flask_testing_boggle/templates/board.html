@@ -10,7 +10,7 @@
 <body>
     <div class="gameContainer">
         <div class="gameboard">
-        {% for row in board %}
+        {% for row in session['game_board'] %}
         <table >
             <tr>
             {% for column in row %}
@@ -22,13 +22,27 @@
         </div>
 
         <form action="">
-            <h2>Submit a word!</h2>
-            <input type="text" name="answer">
+            <h3>Submit a word!</h3>
+            <input type="text" >
             <button>Submit!</button>
         </form>
+
+        <h2>{{session['guess']}} is 
+            {% if session['result'] == 'ok'%}
+                on the board!
+            {% elif session['result'] == 'not-on-board'%}
+                not on the board! Try again.
+            {% else %}
+                not a word?!
+            {% endif %}
+        </h2> 
+
     </div>
 
-<script></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+<script src=static/app.js></script>
 </body>
 </html>
