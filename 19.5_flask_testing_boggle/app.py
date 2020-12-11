@@ -12,23 +12,21 @@ boggle_board = Boggle()
 
 @app.route("/")
 def home():
-    
     board = boggle_board.make_board()
     session['game_board'] = board
-    return render_template("board.html")
+
+    return render_template("board.html", )
 
 
-@app.route("/answers", methods=['POST'])
+@app.route("/answers", methods=["GET"])
 def get_answer():
-    #reterive json data from app.js POST
-    word = request.form['submitted']
-    #save to seesion
-    session['guess'] = word
+    if request.method == "GET":
+        #reterive json data from app.js POST
+        word = request.args['submitted']
 
     #make sure word is valid on the board using check_valid_word() from boggle.py
     session_board = session['game_board']
-    validate = boggle_board.check_valid_word(session_board, word)
-    #save to seesion
-    session['result'] = validate
-
-    return redirect("/")
+    res = boggle_board.check_valid_word(session_board, word)
+    result = {"result": res, "word":word}
+    return jsonify(result)
+ 
