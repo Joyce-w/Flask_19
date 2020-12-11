@@ -1,10 +1,14 @@
-//handle form data and response request 
+const $resContainer = $(document.getElementsByClassName('results'))
+const $message = $(document.createElement('h3')).addClass('resultMsg')
+const $points = $(document.getElementsByClassName('pointsDiv'))
+count = 0
+
+//handle form data and response request
 $('form').on('submit', async function (e) {
     e.preventDefault()
 
     //save input value
     let $answer = $('input').val()
-    console.log($answer)
 
      // send form input value to server using axios
     let input = {"submitted": $answer}
@@ -23,14 +27,12 @@ $('form').on('submit', async function (e) {
         return "isn't  a word, did you misspell?"
     }
     else{
-       return "...umm, not a word buddy. Try again"
+       return "isn't a word buddy. Try again"
     }
     }
-    let msg = results()
+    msg = results()
 
     //removes any current result message
-    let $resContainer = $(document.getElementsByClassName('results'))
-    let $message = $(document.createElement('h3')).addClass('resultMsg')
     $('.resultMsg').empty()
 
     //append response data to page
@@ -40,5 +42,22 @@ $('form').on('submit', async function (e) {
     //clear input after submitting 
     $('input').val('') 
 
+    keepScore(word,msg)
 })
+
+function keepScore(word, msg) {
+    
+    //create set to track words used
+    let entries = new Set() 
+    //add point with every new guess
+    if (msg == "is a word! Great job") {
+        count++
+        entries.add(word)
+        $points.text(`Current points: ${count}`)
+    }
+    else {
+        $points.text(`Current points: ${count}`)
+    }
+
+}
 

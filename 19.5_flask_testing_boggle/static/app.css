@@ -18,6 +18,10 @@ form {
     margin: 2%;
 }
 
-.results{
+.results {
+    text-align: center;
+}
+
+.pointsDiv {
     text-align: center;
 }
