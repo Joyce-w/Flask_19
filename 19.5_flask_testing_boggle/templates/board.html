@@ -26,16 +26,8 @@
             <input type="text" >
             <button>Submit!</button>
         </form>
-
-        <h2>{{session['guess']}} is 
-            {% if session['result'] == 'ok'%}
-                on the board!
-            {% elif session['result'] == 'not-on-board'%}
-                not on the board! Try again.
-            {% else %}
-                not a word?!
-            {% endif %}
-        </h2> 
+        <h1>{{word}}</h1>
+        <div class="results"></div>
 
     </div>
 
