@@ -13,9 +13,10 @@ td {
     text-align: center;
 }
 
-form {
+.answerInput {
     text-align: center;
     margin: 2%;
+    display: none;
 }
 
 .results {
@@ -23,5 +24,14 @@ form {
 }
 
 .pointsDiv {
+    text-align: center;
+}
+
+.start {
+    text-align: center;
+}
+
+
+.timerDiv{
     text-align: center;
 }

@@ -1,11 +1,43 @@
 const $resContainer = $(document.getElementsByClassName('results'))
+const $answerInput = $(document.getElementsByClassName('answerInput'))
+const $timer = $(document.getElementsByClassName('timer'))
 const $message = $(document.createElement('h3')).addClass('resultMsg')
 const $points = $(document.getElementsByClassName('pointsDiv'))
+const $startDiv = $(document.getElementsByClassName('start'))
+const $startBtn = $(document.getElementsByClassName('startBtn'))
+
 count = 0
+
+//start timer on start btn click
+$startBtn.on('click', function (e) {
+    e.preventDefault()
+    $startBtn.toggle()
+    $answerInput.toggle()
+    countdownTimer()
+})
+
+//countdown 60 secs of guessing, reset afterwards
+function countdownTimer() {
+    var counter = 6;
+    var countdown = setInterval(function () {
+        $timer.text(counter)
+        counter--
+        if (counter === -1) {
+            clearInterval(countdown);
+            $answerInput.toggle()
+            $timer.text("Game over!")
+
+        }
+    }, 1000);
+}
+
+//reload page when start button is clicked
+
 
 //handle form data and response request
 $('form').on('submit', async function (e) {
     e.preventDefault()
+    $startDiv.toggle()
 
     //save input value
     let $answer = $('input').val()
@@ -42,21 +74,26 @@ $('form').on('submit', async function (e) {
     //clear input after submitting 
     $('input').val('') 
 
-    keepScore(word,msg)
+    keepScore(word, msg)
+    
 })
 
 function keepScore(word, msg) {
     
     //create set to track words used
     let entries = new Set() 
+    
     //add point with every new guess
     if (msg == "is a word! Great job") {
-        count++
-        entries.add(word)
-        $points.text(`Current points: ${count}`)
-    }
-    else {
-        $points.text(`Current points: ${count}`)
+        if (entries.has('word') == false) {
+            count++
+            entries.add(word)
+            $points.text(`Current points: ${count}`)
+        }
+        else {
+            $points.text(`Current points: ${count}`)
+        }
+    
     }
 
 }
