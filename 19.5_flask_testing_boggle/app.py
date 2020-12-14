@@ -14,7 +14,6 @@ boggle_board = Boggle()
 def home():
     board = boggle_board.make_board()
     session['game_board'] = board
-
     return render_template("board.html", )
 
 
@@ -29,4 +28,13 @@ def get_answer():
     res = boggle_board.check_valid_word(session_board, word)
     result = {"result": res, "word":word}
     return jsonify(result)
- 
+
+@app.route("/score_board", methods=["POST"])
+def score_board():
+    if request.method == "POST":
+    #reterive scoreboard data
+        score = request.json
+        session['scores']=score
+        print(score)
+        print(type(score))
+    return score
