@@ -6,7 +6,8 @@ const $points = $(document.getElementsByClassName('pointsDiv'))
 const $startDiv = $(document.getElementsByClassName('start'))
 const $startBtn = $(document.getElementsByClassName('startBtn'))
 
-count = 0
+//create set to track words used
+let entries = new Set() 
 
 //start timer on start btn click
 $startBtn.on('click', function (e) {
@@ -18,7 +19,7 @@ $startBtn.on('click', function (e) {
 
 //countdown 60 secs of guessing, reset afterwards
 function countdownTimer() {
-    var counter = 6;
+    var counter = 60;
     var countdown = setInterval(function () {
         $timer.text(counter)
         counter--
@@ -26,7 +27,6 @@ function countdownTimer() {
             clearInterval(countdown);
             $answerInput.toggle()
             $timer.text("Game over!")
-
         }
     }, 1000);
 }
@@ -52,7 +52,7 @@ $('form').on('submit', async function (e) {
 
     //handle result response
     function results() {
-    if (result == 'ok'){
+        if (result == 'ok') {
         return "is a word! Great job"
     }
     else if( result == 'not-on-board'){
@@ -74,27 +74,32 @@ $('form').on('submit', async function (e) {
     //clear input after submitting 
     $('input').val('') 
 
-    keepScore(word, msg)
+    keepScore(word, msg, entries)
     
 })
 
 function keepScore(word, msg) {
     
-    //create set to track words used
-    let entries = new Set() 
-    
     //add point with every new guess
     if (msg == "is a word! Great job") {
-        if (entries.has('word') == false) {
-            count++
-            entries.add(word)
-            $points.text(`Current points: ${count}`)
-        }
-        else {
-            $points.text(`Current points: ${count}`)
-        }
-    
+        entries.add(word)
+        $points.text(`Current points: ${entries.size}`)
     }
 
 }
 
+
+let menu = {
+    width: 200,
+    height: 300,
+    title: "My menu"
+};
+
+function multiplyNumeric(menu) {
+    for (let item in menu) {
+        if (typeof(menu[item] == "number")){
+            menu[item] *= 2;
+        }
+    }
+}
+multiplyNumeric(menu)
