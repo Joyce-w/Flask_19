@@ -33,8 +33,10 @@ def get_answer():
 def score_board():
     if request.method == "POST":
     #reterive scoreboard data
+    #save high score & number of plays
         score = request.json
         session['scores']=score
         print(score)
         print(type(score))
+
     return score
