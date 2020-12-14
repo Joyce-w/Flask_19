@@ -31,3 +31,6 @@ class FlaskTests(TestCase):
             res = self.client.get('/answers?submitted=mo')
             self.assertEqual(res.json[result], "ok")
  
+# test for high score
+# test for result content
+# test session results
